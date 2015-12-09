@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="3.2" method="install" client="site">
+
+    <name>com_getresponse</name>
+    <creationDate>September 2015</creationDate>
+    <author>GetResponse</author>
+    <authorEmail>integrations@getresponse.com</authorEmail>
+    <authorUrl>http://www.getresponse.com</authorUrl>
+    <copyright>Getresponse</copyright>
+    <license>GPL 2.0</license>
+    <version>3.0.0</version>
+    <description>COM_GETRESPONSE_XML_DESCRIPTION</description>
+
+    <install>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+    <update>
+        <schemas>
+            <schemapath type="mysql">sql/updates/mysql</schemapath>
+        </schemas>
+    </update>
+
+    <media destination="com_getresponse" folder="media">
+        <filename>index.html</filename>
+        <folder>images</folder>
+    </media>
+
+    <administration>
+        <menu img="../media/com_getreponse/images/getresponse-16-16.png" alias="Getresponse">COM_GETRESPONSE_MENU</menu>
+        <files folder="admin">
+            <filename>index.html</filename>
+            <filename>getresponse.php</filename>
+            <filename>controller.php</filename>
+            <folder>assets</folder>
+            <folder>controllers</folder>
+            <folder>sql</folder>
+            <folder>tables</folder>
+            <folder>views</folder>
+        </files>
+        <languages folder="admin">
+            <language tag="en-GB">language/en-GB/en-GB.com_getresponse.ini</language>
+            <language tag="en-GB">language/en-GB/en-GB.com_getresponse.sys.ini</language>
+            <language tag="pl-PL">language/pl-PL/pl-PL.com_getresponse.ini</language>
+            <language tag="pl-PL">language/pl-PL/pl-PL.com_getresponse.sys.ini</language>
+        </languages>
+    </administration>
+
+</extension>
