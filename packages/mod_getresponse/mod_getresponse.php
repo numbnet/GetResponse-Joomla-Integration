@@ -1,4 +1,7 @@
 <?php
+/**
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
 defined('_JEXEC') or die('Direct Access to this location is not allowed.');
 
 if (file_exists(JPATH_ADMINISTRATOR . '/components/com_getresponse/getresponse.php') && JComponentHelper::isEnabled('com_getresponse', true))

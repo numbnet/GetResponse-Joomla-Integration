@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <extension type="package" version="3.2">
 
-    <name>GetResponse</name>
+    <name>GetResponse Integration</name>
     <author>GetResponse</author>
     <creationDate>September 2015</creationDate>
+    <license>GPL 2.0</license>
     <packagename>getresponse</packagename>
     <version>3.0.0</version>
     <url>http://www.getresponse.com/</url>

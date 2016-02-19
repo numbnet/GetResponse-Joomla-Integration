@@ -1,4 +1,7 @@
 <?php
+/**
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
 defined('_JEXEC') or die;
 
 if (!JFactory::getUser()->authorise('core.manage', 'com_getresponse'))

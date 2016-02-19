@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" version="3.2" client="site" method="install">
-    <name>com_getresponse</name>
+    <name>GetResponse Integration</name>
     <creationDate>September 2015</creationDate>
     <author>GetResponse</author>
     <authorEmail>integrations@getresponse.com</authorEmail>
