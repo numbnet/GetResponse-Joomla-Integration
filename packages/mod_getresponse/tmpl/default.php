@@ -1,6 +1,6 @@
 <?php
 /**
- * @license    GNU General Public License version 2 or later; see LICENSE
+ * @license    Licensed under the GPL v2
  */
 defined('_JEXEC') or die;
 ?>

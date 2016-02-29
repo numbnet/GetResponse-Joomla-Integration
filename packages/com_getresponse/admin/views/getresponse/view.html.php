@@ -1,6 +1,6 @@
 <?php
 /**
- * @license    GNU General Public License version 2 or later; see LICENSE
+ * @license    Licensed under the GPL v2
  */
 defined('_JEXEC') or die;
 
@@ -58,7 +58,7 @@ class getresponseViewGetResponse extends JViewLegacy
 		$input = new JInput;
 		$apikey_param = $input->get('api_key', '', 'post');
 
-		if ($_POST)
+		if ($_SERVER['REQUEST_METHOD'] === 'POST')
 		{
 			if (!$apikey_param)
 			{
@@ -208,7 +208,7 @@ class getresponseViewGetResponse extends JViewLegacy
 	{
 		$db = JFactory::getDBO();
 
-		$query = 'INSERT INTO #__getresponse (`apikey`) VALUES ("'. $this->apikey .'")';
+		$query = 'INSERT INTO #__getresponse (apikey) VALUES ("'. $this->apikey .'")';
 		$db->setQuery( $query );
 		$db->execute();
 	}
@@ -287,7 +287,7 @@ class getresponseViewGetResponse extends JViewLegacy
 	{
 		$db = JFactory::getDBO();
 
-		$query = 'UPDATE #__getresponse SET `webform_id` = "'. $webform_id .'" WHERE apikey = "' . $this->apikey . '"';
+		$query = 'UPDATE #__getresponse SET webform_id = "'. $webform_id .'" WHERE apikey = "' . $this->apikey . '"';
 		$db->setQuery( $query );
 		$db->execute();
 	}
@@ -302,7 +302,7 @@ class getresponseViewGetResponse extends JViewLegacy
 	{
 		$db = JFactory::getDBO();
 
-		$query = 'UPDATE #__getresponse SET `webform_generation` = "'. (int)$generation .'" WHERE apikey = "' . $this->apikey . '"';
+		$query = 'UPDATE #__getresponse SET webform_generation = "'. (int)$generation .'" WHERE apikey = "' . $this->apikey . '"';
 		$db->setQuery( $query );
 		$db->execute();
 	}
@@ -317,7 +317,7 @@ class getresponseViewGetResponse extends JViewLegacy
 	{
 		$db = JFactory::getDBO();
 
-		$query = 'UPDATE  #__getresponse SET `webform_url` = "'. $webform_url .'" WHERE apikey = "' . $this->apikey . '"';
+		$query = 'UPDATE  #__getresponse SET webform_url = "'. $webform_url .'" WHERE apikey = "' . $this->apikey . '"';
 		$db->setQuery( $query );
 		$db->execute();
 	}
@@ -332,7 +332,7 @@ class getresponseViewGetResponse extends JViewLegacy
 	{
 		$db = JFactory::getDBO();
 
-		$query = 'UPDATE #__getresponse SET `active` = "'. $status .'" WHERE apikey = "' . $this->apikey . '"';
+		$query = 'UPDATE #__getresponse SET active = "'. $status .'" WHERE apikey = "' . $this->apikey . '"';
 		$db->setQuery( $query );
 		$db->execute();
 	}
@@ -347,7 +347,7 @@ class getresponseViewGetResponse extends JViewLegacy
 	{
 		$db = JFactory::getDBO();
 
-		$query = 'UPDATE #__getresponse SET `css_style` = "'. $style .'" WHERE apikey = "' . $this->apikey . '"';
+		$query = 'UPDATE #__getresponse SET css_style = "'. $style .'" WHERE apikey = "' . $this->apikey . '"';
 		$db->setQuery( $query );
 		$db->execute();
 	}
@@ -371,7 +371,7 @@ class getresponseViewGetResponse extends JViewLegacy
 	{
 		$db = JFactory::getDBO();
 
-		$query = 'UPDATE  #__getresponse SET `campaign_id` = "'. $campaign_id .'" WHERE apikey = "' . $this->apikey . '"';
+		$query = 'UPDATE  #__getresponse SET campaign_id = "'. $campaign_id .'" WHERE apikey = "' . $this->apikey . '"';
 		$db->setQuery( $query );
 		$db->execute();
 	}
@@ -413,7 +413,7 @@ class getresponseViewGetResponse extends JViewLegacy
 	{
 		$db = JFactory::getDBO();
 
-		$query = 'UPDATE  #__getresponse SET `active_on_registration` = "'. $active_on_registration .'" WHERE apikey = "' . $this->apikey . '"';
+		$query = 'UPDATE  #__getresponse SET active_on_registration = "'. $active_on_registration .'" WHERE apikey = "' . $this->apikey . '"';
 		$db->setQuery( $query );
 		$db->execute();
 	}

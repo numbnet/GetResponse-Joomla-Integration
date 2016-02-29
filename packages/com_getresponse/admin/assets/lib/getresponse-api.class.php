@@ -7,7 +7,7 @@ defined('_JEXEC') or die;
  * @author Pawel Maslak <pawel.maslak@getresponse.com>
  * @author Grzegorz Struczynski <grzegorz.struczynski@getresponse.com>
  *
- * @license    GNU General Public License version 2 or later; see LICENSE
+ * @license    Licensed under the GPL v2
  * @see http://apidocs.getresponse.com/en/v3/resources
  * @see https://github.com/GetResponse/getresponse-api-php
  */
