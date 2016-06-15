@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<extension type="package" version="3.2">
+
+    <name>GetResponse</name>
+    <author>GetResponse</author>
+    <creationDate>May 2016</creationDate>
+    <license>GPL 2.0</license>
+    <packagename>getresponse</packagename>
+    <version>3.0.1</version>
+    <url>http://www.getresponse.com/</url>
+    <packager>Getresponse Team</packager>
+    <packagerurl>http://www.getresponse.com/</packagerurl>
+    <description>COM_GETRESPONSE_XML_DESCRIPTION</description>
+    <files folder="packages">
+        <file type="component" id="com_getresponse">com_getresponse.zip</file>
+        <file type="module" id="mod_getresponse" client="site">mod_getresponse.zip</file>
+        <file type="plugin" id="getresponse" group="content">plg_getresponse.zip</file>
+    </files>
+
+</extension>

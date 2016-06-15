@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="params">
+
+		<field
+			name="getresponse_add_subscriber_option"
+			type="checkbox"
+			label="PLG_USERS_REGISTER_GETRESPONSE_CHECKBOX_LABEL"
+			description="PLG_USERS_REGISTER_GETRESPONSE_CHECKBOX_DESCRIPTION"
+			value="1"
+			default="0"
+		/>
+
+	</fieldset>
+</form>

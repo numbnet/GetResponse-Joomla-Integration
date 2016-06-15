@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.2" client="site" method="install">
+    <name>GetResponse</name>
+    <creationDate>May 2016</creationDate>
+    <author>GetResponse</author>
+    <authorEmail>integrations@getresponse.com</authorEmail>
+    <authorUrl>http://www.getresponse.com</authorUrl>
+    <copyright>Getresponse</copyright>
+    <license>GPL 2.0</license>
+    <version>3.0.1</version>
+    <description>COM_GETRESPONSE_XML_DESCRIPTION</description>
+    <files>
+        <filename module="mod_getresponse">mod_getresponse.php</filename>
+        <folder>tmpl</folder>
+        <filename>index.html</filename>
+        <filename>mod_getresponse.xml</filename>
+    </files>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.mod_getresponse.ini</language>
+    </languages>
+</extension>
