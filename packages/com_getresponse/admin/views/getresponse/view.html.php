@@ -11,7 +11,7 @@ jimport('joomla.application.component.view');
  */
 class getresponseViewGetResponse extends JViewLegacy
 {
-	public $apikey, $webforms, $webform_id, $success, $css_style, $is_active, $feeds;
+	public $apikey, $accountInfo, $webforms, $webform_id, $success, $css_style, $is_active, $feeds, $old_webforms, $new_webforms;
 	public $flash = '';
 	public $rss_url = 'http://blog.getresponse.com/feed';
 
@@ -29,6 +29,7 @@ class getresponseViewGetResponse extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+
 		try
 		{
 			require_once(JPATH_ADMINISTRATOR.'/components/com_getresponse/assets/lib/getresponse-api.class.php');
@@ -36,6 +37,10 @@ class getresponseViewGetResponse extends JViewLegacy
 			JToolBarHelper::title(JText::_('COM_GETRESPONSE_PLUGIN_NAME'), 'getresponse');
 
 			$this->apikey = $this->getApiKey();
+
+			if (!empty($this->apikey)) {
+				$this->accountInfo = (new GetResponse($this->apikey))->accounts();
+			}
 
 			$this->parsePost();
 
@@ -62,7 +67,10 @@ class getresponseViewGetResponse extends JViewLegacy
 		{
 			if (!$apikey_param)
 			{
-				$this->flash = array('type' => 'error', 'message' => JText::_('COM_GETRESPONSE_EMPTY_APIKEY'));
+				JFactory::getApplication()->enqueueMessage(JText::_('COM_GETRESPONSE_EMPTY_APIKEY'), 'error');
+				$url = JUri::getInstance();
+				$app = JFactory::getApplication();
+				$app->redirect($url->toString());
 			}
 			else
 			{
@@ -71,49 +79,68 @@ class getresponseViewGetResponse extends JViewLegacy
 
 				if (!empty($ping) && !isset($ping->accountId))
 				{
-					$this->flash = array('type' => 'error', 'message' => JText::_('COM_GETRESPONSE_INVALID_APIKEY'));
+					JFactory::getApplication()->enqueueMessage(JText::_('COM_GETRESPONSE_INVALID_APIKEY'), 'error');
+					$url = JUri::getInstance();
+					$app = JFactory::getApplication();
+					$app->redirect($url->toString());
 				}
 			}
 
-			if ($this->flash == '')
+			$success_info = 'COM_GETRESPONSE_SUCCESS';
+
+			if ($this->apikey != $apikey_param)
 			{
-				if ($this->apikey != $apikey_param)
-				{
-					$this->apikey = $apikey_param;
-					$this->setApiKey($apikey_param);
+				$this->apikey = $apikey_param;
+				$this->setApiKey($apikey_param);
+				$success_info = 'COM_GETRESPONSE_SUCCESS_APIKEY';
+			}
+
+			$is_active = $input->get('is_active', '', 'post');
+			$this->setActiveStatus($is_active);
+
+			$css_style = $input->get('css_style', '', 'post');
+			$this->setCssStyle($css_style);
+
+			$campaign_id = $input->get('campaign_id', '', 'post');
+			if (!empty($campaign_id)) {
+				$this->setCampaignId($campaign_id);
+			}
+
+			$active_on_registration = $input->get('active_on_registration', '', 'post');
+			if (empty($active_on_registration)) {
+				$active_on_registration = 0;
+			}
+			$this->setActiveOnRegistration($active_on_registration);
+
+			$webform_id = $input->get('webform_id', '', 'post');
+			if ($webform_id)
+			{
+				$webform = $api->getWebform($webform_id);
+				$generation = $this->web_form_generation_second;
+
+				if ( !empty($webform->webformId)) {
+					$generation = $this->web_form_generation_first;
 				}
 
-				$is_active = $input->get('is_active', '', 'post');
-				$this->setActiveStatus($is_active);
+				$this->setWebformId($webform_id);
+				$this->setWebformGeneration($generation);
+			}
 
-				$css_style = $input->get('css_style', '', 'post');
-				$this->setCssStyle($css_style);
+			JFactory::getApplication()->enqueueMessage(JText::_($success_info));
 
-				$campaign_id = $input->get('campaign_id', '', 'post');
-				if (!empty($campaign_id)) {
-					$this->setCampaignId($campaign_id);
-				}
+			$url = JUri::getInstance();
+			$app = JFactory::getApplication();
+			$app->redirect($url->toString());
+		} else {
+			if ($input->get('disconnect', 0) == 1) {
+				JFactory::getApplication()->enqueueMessage(JText::_('COM_GETRESPONSE_DISCONNECTED'));
+				$this->disconnectIntegration();
 
-				$active_on_registration = $input->get('active_on_registration', '', 'post');
-				if (empty($active_on_registration)) {
-					$active_on_registration = 0;
-				}
-				$this->setActiveOnRegistration($active_on_registration);
+				$url = JUri::getInstance();
+				$url->delVar('disconnect');
 
-				$webform_id = $input->get('webform_id', '', 'post');
-				if ($webform_id)
-				{
-					$webform = $api->getWebform($webform_id);
-					$generation = $this->web_form_generation_second;
-
-					if ( !empty($webform->webformId)) {
-						$generation = $this->web_form_generation_first;
-					}
-
-					$this->setWebformId($webform_id);
-					$this->setWebformGeneration($generation);
-				}
-				$this->flash = array('type' => 'success', 'message' => JText::_('COM_GETRESPONSE_SUCCESS'));
+				$app = JFactory::getApplication();
+				$app->redirect($url->toString());
 			}
 		}
 	}
@@ -128,7 +155,8 @@ class getresponseViewGetResponse extends JViewLegacy
 
 			$this->active_on_registration = $this->getActiveOnRegistration();
 
-			$this->webforms_groups = array();
+			$this->old_webforms = array();
+			$this->new_webforms = array();
 
 			if ( !empty($this->campaigns))
 			{
@@ -138,24 +166,22 @@ class getresponseViewGetResponse extends JViewLegacy
 					$c[$v->campaignId] = $v->name;
 				}
 
-				$this->webforms_groups[0]['optgroup'] = 'Old webforms';
 				$webforms = $api->getWebforms();
 
 
 				foreach ($webforms as $id => $webform)
 				{
 					if ('enabled' == $webform->status) {
-						$this->webforms_groups[0]['webforms'][$webform->webformId] = $webform->name . ' (' . $c[$webform->campaign->campaignId] . ')';
+						$this->old_webforms[$webform->webformId] = $webform->name . ' (' . $c[$webform->campaign->campaignId] . ')';
 					}
 				}
 
-				$this->webforms_groups[1]['optgroup'] = 'New webforms';
 				$webforms = $api->getForms();
 
 				foreach ($webforms as $id => $webform)
 				{
 					if ('deleted' != $webform->status) {
-						$this->webforms_groups[1]['webforms'][$webform->formId] = $webform->name . ' (' . $c[$webform->campaign->campaignId] . ')';
+						$this->new_webforms[$webform->formId] = $webform->name . ' (' . $c[$webform->campaign->campaignId] . ')';
 					}
 				}
 			}
@@ -209,6 +235,19 @@ class getresponseViewGetResponse extends JViewLegacy
 		$db = JFactory::getDBO();
 
 		$query = 'INSERT INTO #__getresponse (apikey) VALUES ("'. $this->apikey .'")';
+		$db->setQuery( $query );
+		$db->execute();
+	}
+
+	/**
+	 * disconnect integration
+	 *
+	 */
+	protected function disconnectIntegration()
+	{
+		$db = JFactory::getDBO();
+
+		$query = 'DELETE FROM #__getresponse';
 		$db->setQuery( $query );
 		$db->execute();
 	}
@@ -359,8 +398,10 @@ class getresponseViewGetResponse extends JViewLegacy
 	 */
 	protected function setDocument()
 	{
+		JHtml::_('jquery.framework');
 		$document = JFactory::getDocument();
 		$document -> addStyleSheet(JURI::base() . 'components/com_getresponse/assets/css/getresponse.css');
+		$document -> addScript(JURI::base() . 'components/com_getresponse/assets/js/getresponse.js', 'text/javascript', false, true);
 		$document -> addStyleDeclaration('.icon-getresponse ' . '{background-image: url(../media/com_getresponse/images/getresponse-16-16.png);}');
 	}
 

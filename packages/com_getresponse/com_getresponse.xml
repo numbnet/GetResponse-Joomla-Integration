@@ -2,13 +2,13 @@
 <extension type="component" version="3.2" method="install" client="site">
 
     <name>COM_GETRESPONSE</name>
-    <creationDate>September 2015</creationDate>
+    <creationDate>May 2016</creationDate>
     <author>GetResponse</author>
     <authorEmail>integrations@getresponse.com</authorEmail>
     <authorUrl>http://www.getresponse.com</authorUrl>
     <copyright>Getresponse</copyright>
     <license>GPL 2.0</license>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
     <description>COM_GETRESPONSE_XML_DESCRIPTION</description>
 
     <install>
